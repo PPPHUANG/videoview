@@ -59,5 +59,6 @@ func VideoClearExecutor(dc dataChan) error {
 		}
 		return true
 	})
+	log.Printf("this is  VideoClearExecutor")
 	return err
 }

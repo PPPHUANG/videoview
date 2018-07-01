@@ -2,7 +2,6 @@ package taskrunner
 
 import "time"
 
-//你要这样拿 这样 我说你这不行啊
 type Worker struct {
 	ticker *time.Ticker
 	runner *Runner

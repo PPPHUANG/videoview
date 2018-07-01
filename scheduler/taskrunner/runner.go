@@ -1,5 +1,7 @@
 package taskrunner
 
+import "log"
+
 type Runner struct {
 	Controller controlChan
 	Error controlChan
@@ -10,7 +12,7 @@ type Runner struct {
 	Executor fn
 }
 
-func NewRunner(size int, longlived bool, d fn, e fn) * Runner {
+func NewRunner(size int, longlived bool, d fn, e fn) *Runner {
 	return &Runner {
 		Controller:make(chan string, 1),
 		Error:make(chan string, 1),
@@ -35,6 +37,7 @@ func (r *Runner) startDispatch() {
 		select {
 		case c:=<- r.Controller:
 			if c == READY_TO_DISPATCH {
+				log.Printf("this is before Dispatcher")
 				err := r.Dispatcher(r.Data)
 				if err != nil {
 					r.Error <- CLOSE
@@ -44,6 +47,7 @@ func (r *Runner) startDispatch() {
 			}
 
 			if c == READY_TO_EXECUTE {
+				log.Printf("this is before Excutor")
 				err := r.Executor(r.Data)
 				if err != nil {
 					r.Error <- CLOSE
@@ -53,6 +57,7 @@ func (r *Runner) startDispatch() {
 			}
 		case e:=<- r.Error:
 			if e == CLOSE {
+				log.Printf("this is before CLOSE")
 				return
 			}
 		default:
@@ -63,5 +68,6 @@ func (r *Runner) startDispatch() {
 
 func (r *Runner) StartAll() {
 	r.Controller <- READY_TO_DISPATCH
+	log.Printf("this is befor StartAll")
 	r.startDispatch()
 }

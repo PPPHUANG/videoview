@@ -1,6 +1,9 @@
 package dbops
 
-import "log"
+import (
+	"log"
+	_ "github.com/go-sql-driver/mysql"
+)
 
 func ReadVideoDeletionRecord(count int) ([]string, error) {
 	stmtOut,err := dbConn.Prepare("select video_id from video_del_rec limit ?")
